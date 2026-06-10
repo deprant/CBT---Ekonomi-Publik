@@ -7,7 +7,7 @@ let studentName = "";
 let studentNim = "";
 let studentClass = "";
 
-let duration = 20 * 60;
+let duration = 120 * 60;
 let timerInterval;
 
 // =========================
