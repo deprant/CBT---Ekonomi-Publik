@@ -3,15 +3,17 @@ const WEBAPP_URL =
 
 let currentQuestion = 0;
 let userAnswers = [];
+let essayAnswers = [];
+
 let studentName = "";
 let studentNim = "";
 let studentClass = "";
 
-let duration = 90 * 60;
+let duration = 20 * 60;
 let timerInterval;
 
 // =========================
-// SHUFFLE FUNCTION
+// SHUFFLE
 // =========================
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -21,28 +23,10 @@ function shuffleArray(array) {
 }
 
 // =========================
-// RANDOMIZE QUESTIONS + OPTIONS
+// RANDOMIZE QUESTIONS
 // =========================
 function randomizeQuestions() {
-
     shuffleArray(questions);
-
-    questions.forEach(q => {
-
-        const correctAnswerText = q.options[q.answer];
-
-        const optionsWithFlag = q.options.map((opt, idx) => {
-            return {
-                text: opt,
-                isCorrect: idx === q.answer
-            };
-        });
-
-        shuffleArray(optionsWithFlag);
-
-        q.options = optionsWithFlag.map(o => o.text);
-        q.answer = q.options.indexOf(correctAnswerText);
-    });
 }
 
 // =========================
@@ -55,13 +39,15 @@ function startExam() {
     studentClass = document.getElementById("kelas").value.trim();
 
     if (!studentName || !studentNim || !studentClass) {
-        alert("Lengkapi Nama, NIM, dan Kelas.");
+        alert("Lengkapi data.");
         return;
     }
 
     randomizeQuestions();
 
     userAnswers = new Array(questions.length).fill(null);
+    essayAnswers = new Array(questions.length).fill("");
+
     currentQuestion = 0;
 
     document.getElementById("login-page").style.display = "none";
@@ -85,30 +71,44 @@ function loadQuestion() {
 
     let html = "";
 
-    q.options.forEach((option, index) => {
+    if (q.type === "mcq") {
 
-        let selected = "";
+        q.options.forEach((option, index) => {
 
-        if (userAnswers[currentQuestion] === index) {
-            selected = "selected";
-        }
+            let selected = userAnswers[currentQuestion] === index ? "selected" : "";
 
-        html += `
-            <button class="option ${selected}" onclick="selectAnswer(${index})">
-                ${option}
-            </button>
+            html += `
+                <button class="option ${selected}" onclick="selectAnswer(${index})">
+                    ${option}
+                </button>
+            `;
+        });
+
+    } else if (q.type === "essay") {
+
+        html = `
+            <textarea style="width:100%; height:160px;"
+                onchange="saveEssay(this.value)"
+                placeholder="Jawaban analitis...">${essayAnswers[currentQuestion] || ""}</textarea>
         `;
-    });
+    }
 
     document.getElementById("options").innerHTML = html;
 }
 
 // =========================
-// SELECT ANSWER
+// MCQ ANSWER
 // =========================
 function selectAnswer(index) {
     userAnswers[currentQuestion] = index;
     loadQuestion();
+}
+
+// =========================
+// ESSAY ANSWER
+// =========================
+function saveEssay(value) {
+    essayAnswers[currentQuestion] = value;
 }
 
 // =========================
@@ -137,15 +137,14 @@ function startTimer() {
 
         duration--;
 
-        const minutes = Math.floor(duration / 60);
-        const seconds = duration % 60;
+        const m = Math.floor(duration / 60);
+        const s = duration % 60;
 
         document.getElementById("timer").innerText =
-            `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+            `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 
         if (duration <= 0) {
             clearInterval(timerInterval);
-            alert("Waktu habis.");
             submitExam();
         }
 
@@ -153,7 +152,7 @@ function startTimer() {
 }
 
 // =========================
-// SUBMIT EXAM
+// SUBMIT
 // =========================
 async function submitExam() {
 
@@ -162,7 +161,7 @@ async function submitExam() {
     let score = 0;
 
     questions.forEach((q, i) => {
-        if (userAnswers[i] === q.answer) {
+        if (q.type === "mcq" && userAnswers[i] === q.answer) {
             score++;
         }
     });
@@ -174,21 +173,18 @@ async function submitExam() {
         nim: studentNim,
         kelas: studentClass,
         score: finalScore,
-        jawaban: userAnswers
+        jawaban_mcq: userAnswers,
+        jawaban_essay: essayAnswers
     };
 
-    try {
-        await fetch(WEBAPP_URL, {
-            method: "POST",
-            body: JSON.stringify(payload)
-        });
-    } catch (error) {
-        console.error(error);
-    }
+    await fetch(WEBAPP_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+    });
 
     document.getElementById("exam-page").style.display = "none";
     document.getElementById("result-page").style.display = "block";
 
     document.getElementById("score-display").innerText =
-        `Nilai Anda: ${finalScore}`;
+        `Nilai MCQ: ${finalScore} | Essay dikirim untuk penilaian manual`;
 }
