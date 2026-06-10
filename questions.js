@@ -338,41 +338,54 @@ const questions = [
     answer: 1
   },
 
-  // =========================
-  // BAGIAN C: ANALITIS (31–33)
-  // =========================
+/* =========================
+   31. ISOQUANT / ISOCOST (NUMERIC + ESSAY)
+   ========================= */
 
-  {
-    question: "Jika MRTS = 4, w = 100.000, r = 25.000, maka kondisi efisiensi biaya:",
-    options: [
-      "Tidak efisien karena MRTS ≠ w/r",
-      "Efisien karena MRTS = w/r",
-      "Tidak terkait dengan biaya",
-      "Selalu efisien"
-    ],
-    answer: 1
-  },
+{
+  type: "essay",
+  question: `Sebuah perusahaan memiliki kondisi:
+MRTS = 4, w = 100.000, r = 25.000.
 
-  {
-    question: "Dalam kasus pariwisata Bali, eksternalitas negatif menyebabkan:",
-    options: [
-      "Output terlalu rendah",
-      "Output terlalu tinggi dari tingkat sosial optimal",
-      "Tidak ada dampak",
-      "Harga selalu nol"
-    ],
-    answer: 1
-  },
+a. Hitung rasio w/r
+b. Apakah sudah efisien secara biaya?
+c. Jelaskan hubungan MRTS dengan isocost`,
+  answerGuide: "w/r = 4; efisien jika MRTS = w/r"
+},
 
-  {
-    question: "Pada pasar monopoli air bersih, dibandingkan pasar kompetitif:",
-    options: [
-      "Output lebih tinggi",
-      "Output lebih rendah dan harga lebih tinggi",
-      "Harga lebih rendah",
-      "Tidak ada perubahan"
-    ],
-    answer: 1
-  }
+/* =========================
+   32. EXTERNALITY (NUMERIC)
+   ========================= */
+
+{
+  type: "essay",
+  question: `Pariwisata Bali:
+PMB = 300 - 2Q
+PMC = 60 + Q
+MEC = Q
+
+a. Hitung Q pasar
+b. Hitung Q sosial optimal
+c. Hitung DWL
+d. Pajak Pigouvian`,
+  answerGuide: "Q pasar: 80; Q sosial: 60; pajak = MEC = Q"
+},
+
+/* =========================
+   33. MONOPOLI PDAM
+   ========================= */
+
+{
+  type: "essay",
+  question: `PDAM:
+P = 240 - 2Q
+MR = 240 - 4Q
+MC = 40
+
+a. Q dan P monopoli
+b. Q efisien
+c. DWL`,
+  answerGuide: "Qm=50, Pm=140; Qc=100"
+}
 
 ];
