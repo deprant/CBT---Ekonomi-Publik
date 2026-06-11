@@ -148,26 +148,4 @@ const questions = [
   answer: 1
 },
 
-/* =========================
-   BAGIAN C: ESSAY ANALITIS (21–23)
-   ========================= */
-
-{
-  type: "essay",
-  question: "31. Jelaskan hubungan MRTS dengan kondisi isocost dan efisiensi biaya produksi. Sertakan interpretasi ekonomi.",
-  answerGuide: "MRTS = w/r pada titik efisien"
-},
-
-{
-  type: "essay",
-  question: "32. Analisis eksternalitas pada kasus pariwisata Bali dengan fungsi PMB, PMC, dan MEC. Tentukan dampak inefisiensi pasar.",
-  answerGuide: "Q sosial < Q pasar, terdapat DWL"
-},
-
-{
-  type: "essay",
-  question: "33. Jelaskan inefisiensi monopoli PDAM menggunakan konsep MR = MC dan dampaknya terhadap welfare loss.",
-  answerGuide: "Qm < Qc, terjadi deadweight loss"
-}
-
 ];
