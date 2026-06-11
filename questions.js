@@ -1,7 +1,7 @@
 const questions = [
 
 /* =========================
-   BAGIAN A: MCQ (1–30)
+   BAGIAN A: MCQ (1–20)
    ========================= */
 
 {
@@ -75,7 +75,7 @@ const questions = [
 },
 
 /* =========================
-   BAGIAN B: KASUS (11–30)
+   BAGIAN B: KASUS (11–20)
    ========================= */
 
 {
@@ -149,7 +149,7 @@ const questions = [
 },
 
 /* =========================
-   BAGIAN C: ESSAY ANALITIS (31–33)
+   BAGIAN C: ESSAY ANALITIS (21–23)
    ========================= */
 
 {
