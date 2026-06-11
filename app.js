@@ -159,14 +159,21 @@ async function submitExam() {
     clearInterval(timerInterval);
 
     let score = 0;
+    let totalMCQ = 0;
 
     questions.forEach((q, i) => {
-        if (q.type === "mcq" && userAnswers[i] === q.answer) {
-            score++;
+
+        if (q.type === "mcq") {
+            totalMCQ++;
+
+            if (userAnswers[i] === q.answer) {
+                score++;
+            }
         }
     });
 
-    const finalScore = Math.round((score / questions.length) * 100);
+    const finalScore =
+        totalMCQ > 0 ? Math.round((score / totalMCQ) * 100) : 0;
 
     const payload = {
         nama: studentName,
@@ -177,14 +184,25 @@ async function submitExam() {
         jawaban_essay: essayAnswers
     };
 
-    await fetch(WEBAPP_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-    });
+    try {
+        await fetch(WEBAPP_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+        });
+    } catch (e) {
+        console.log("Submit error:", e);
+    }
 
-    document.getElementById("exam-page").style.display = "none";
-    document.getElementById("result-page").style.display = "block";
+    const resultPage = document.getElementById("result-page");
+    const examPage = document.getElementById("exam-page");
+    const scoreBox = document.getElementById("score-display");
 
-    document.getElementById("score-display").innerText =
-        `Nilai MCQ: ${finalScore} | Essay dikirim untuk penilaian manual`;
+    examPage.style.display = "none";
+    resultPage.style.display = "block";
+
+    if (scoreBox) {
+        scoreBox.innerText = "Nilai Anda: " + finalScore;
+    } else {
+        console.error("score-display tidak ditemukan di HTML");
+    }
 }
